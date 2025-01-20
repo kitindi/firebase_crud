@@ -66,8 +66,6 @@ const Home = () => {
     getCities();
   };
 
-  //    function to update a city information
-
   return (
     <div>
       <div>
@@ -125,6 +123,7 @@ const Home = () => {
                 {" "}
                 City name :{city.cityName}, Country name : {city.Country}, located in {city.Continent}.{" "}
                 <button onClick={() => deleteCity(city.id)}>delete</button>
+                <a href={`/edit/${city.id}`}>Update City</a>
               </li>
             ))}
           </ul>
