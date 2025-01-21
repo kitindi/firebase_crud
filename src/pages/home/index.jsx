@@ -8,7 +8,7 @@ import loadingImage from "../../assets/loading.gif";
 
 const Home = () => {
   const [cities, setCities] = useState([]);
-  const [cityInfo, setCityInfo] = useState({ cityName: "", Country: "", Continent: "" });
+  const [cityInfo, setCityInfo] = useState({ cityName: "", Country: "", Continent: "", userId: auth?.currentUser?.uid });
 
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -45,7 +45,6 @@ const Home = () => {
       await addDoc(collection(db, "cities"), cityInfo);
 
       getCities();
-      alert("Added successfully");
     } catch (error) {
       console.log(error);
     }
