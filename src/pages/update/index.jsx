@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
 
 const UpdateCity = () => {
   const [cityInfo, setCityInfo] = useState({ cityName: "", Country: "", Continent: "" });
+  const [error, setError] = useState("");
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -13,7 +14,6 @@ const UpdateCity = () => {
       try {
         const docRef = doc(db, "cities", id); // Reference to the document
         const docSnap = await getDoc(docRef);
-        console.log(docSnap);
 
         if (docSnap.exists()) {
           setCityInfo(docSnap.data()); // Set form data with the document data
@@ -40,10 +40,12 @@ const UpdateCity = () => {
     try {
       const docRef = doc(db, "cities", id); // Reference to the document
       await updateDoc(docRef, cityInfo); // Update Firestore document
-      console.log("Document updated successfully!");
+
       navigate("/home"); // Redirect to another page (e.g., home page) after update
     } catch (error) {
-      console.error("Error updating document:", error);
+      if (error.code === "permission-denied") {
+        setError("You do not have permission to update this document.");
+      }
     }
   };
 
@@ -85,6 +87,11 @@ const UpdateCity = () => {
           </div>
           <div>
             <button type="submit">Update City</button>
+            {error && (
+              <p style={{ color: "red" }}>
+                Error: {error} <Link to="/home">Back Home</Link>
+              </p>
+            )}
           </div>
         </form>
       </div>
