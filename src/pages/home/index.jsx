@@ -124,7 +124,9 @@ const Home = () => {
             {cities.map((city) => (
               <li key={city.id}>
                 {" "}
-                City name :{city.cityName}, Country name : {city.Country}, located in {city.Continent}.{" "}
+                <p>City name :{city.cityName} </p>
+                <p>Country name : {city.Country}</p>
+                <p>Continent name : {city.Continent}</p>
                 <button onClick={() => deleteCity(city.id)}>delete</button>
                 <a href={`/edit/${city.id}`}>Update City</a>
               </li>
