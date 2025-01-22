@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuthContext } from "../context/AuthContext";
-const Auth = () => {
-  const { googleSignIn, signUp } = useAuthContext();
+import { useAuthContext } from "../../context/AuthContext";
+
+const Login = () => {
+  const { login, googleSignIn } = useAuthContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null); // State to store error messages
@@ -11,26 +12,20 @@ const Auth = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await signUp(email, password);
+      await login(email, password);
       setError(null); // Clear any previous errors
       navigate("/home");
     } catch (error) {
       console.error(error);
-      const getFriendlyMessage = (code) => {
-        switch (code) {
-          case "auth/email-already-in-use":
-            return "The email address is already in use.";
-          case "auth/weak-password":
-            return "Password should be at least 6 characters.";
-          case "auth/invalid-email":
-            return "The email address is not valid.";
-          default:
-            return "An unknown error occurred.";
-        }
-      };
+    }
 
-      // Inside the catch block
-      setError(getFriendlyMessage(error.code));
+    // Inside the catch block
+    if (error.code === "auth/user-not-found") {
+      setError("User not found. Please check your email and try again.");
+    } else if (error.code === "auth/wrong-password") {
+      setError("Incorrect password. Please check your password and try again.");
+    } else {
+      setError("An error occurred. Please try again.");
     }
   };
 
@@ -47,7 +42,7 @@ const Auth = () => {
     <div>
       <form action="" onSubmit={handleSubmit}>
         <div>
-          <h1>Create Account</h1>
+          <h1>Login</h1>
         </div>
         <div>
           <input
@@ -72,9 +67,9 @@ const Auth = () => {
           />
         </div>
         <div>
-          <button type="submit">Create Account</button>
+          <button type="submit">login</button>
           <p>
-            Already have an account ? <Link to="/">Login</Link>
+            Dont have an account ? <Link to="/signup">Signup now</Link>
           </p>
         </div>
         <div>
@@ -87,4 +82,4 @@ const Auth = () => {
   );
 };
 
-export default Auth;
+export default Login;
