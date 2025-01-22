@@ -60,9 +60,13 @@ const Home = () => {
   // function to delete a document from firestore database
 
   const deleteCity = async (id) => {
-    const city = doc(db, "cities", id);
-    await deleteDoc(city);
-    getCities();
+    try {
+      const city = doc(db, "cities", id);
+      await deleteDoc(city);
+      getCities();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
